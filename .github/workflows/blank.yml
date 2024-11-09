@@ -8,20 +8,31 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
         cache-dependency-path: workflow/package-lock.json
-        node-version: 20
+        node-version: ${{ matrix.node-version }}  # Use the matrix version
         cache: 'npm'
-    - run: npm i
+    - run: npm install
     - run: npm test
+
+    # Install ngrok
+    - name: Install ngrok
+      run: |
+        wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+        tar -xvzf ngrok-v3-stable-linux-amd64.tgz
+        sudo mv ngrok /usr/local/bin
+
+    # Start ngrok
+    - name: Start ngrok
+      run: ngrok http 3000 &  # Replace with your app's port
+      env:
+        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}  # Use the secret for ngrok token
