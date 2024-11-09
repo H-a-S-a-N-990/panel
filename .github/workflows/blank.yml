@@ -37,4 +37,4 @@ jobs:
 
     # Start ngrok with specified subdomain
     - name: Start ngrok
-      run: ngrok http --subdomain=wahoo-verified-malamute 3000   # Replace with your app's port
+      run: ngrok http --url=wahoo-verified-malamute.ngrok-free.app 3000 &   # Replace with your app's port
