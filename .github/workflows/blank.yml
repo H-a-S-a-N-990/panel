@@ -31,8 +31,10 @@ jobs:
         tar -xvzf ngrok-v3-stable-linux-amd64.tgz
         sudo mv ngrok /usr/local/bin
 
+    # Add ngrok auth token
+    - name: Configure ngrok
+      run: ngrok config add-authtoken ${{ secrets.NGROK_TOKEN }}  # Use the secret for ngrok token
+
     # Start ngrok
     - name: Start ngrok
       run: ngrok http 3000 &  # Replace with your app's port
-      env:
-        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}  # Use the secret for ngrok token
